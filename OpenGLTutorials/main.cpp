@@ -5,9 +5,13 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <SDL.h>
+#include <SDL/SDL.h>
 
 #include "Shader.h"
+
+#ifdef main
+#undef main
+#endif
 
 std::string file = __FILE__;
 int width = 800, height = 600;
