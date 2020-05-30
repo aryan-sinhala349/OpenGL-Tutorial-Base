@@ -13,12 +13,21 @@
 #undef main
 #endif
 
+enum class VSyncMode
+{
+	Adaptive = -1,
+	Immediate = 0,
+	Synchronized = 1
+};
+
 std::string file = __FILE__;
 int width = 800, height = 600;
 float aspectRatio = 800.0f / 600.0f;
 
 float deltaTime = 0.0f;
 float lastTime = 0.0f;
+
+VSyncMode vsync = VSyncMode::Immediate;
 
 int main(int argc, char* argv[])
 {
@@ -52,8 +61,6 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-	SDL_GL_SetSwapInterval(0);
-
 	SDL_GLContext context = SDL_GL_CreateContext(window);
 
 	if (!context)
@@ -62,6 +69,9 @@ int main(int argc, char* argv[])
 		SDL_Quit();
 		exit(1);
 	}
+	
+	if (SDL_GL_SetSwapInterval((int)vsync))
+		std::cerr << "Failed to set swap interval. Error: " << SDL_GetError() << std::endl;
 
 	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
 	{
@@ -105,6 +115,10 @@ int main(int argc, char* argv[])
 		//Updating
 		float currentTime = SDL_GetTicks() / 1000.0f;
 		deltaTime = currentTime - lastTime;
+
+		printf("FPS: %i\n", (int)round(1.0f / deltaTime));
+
+		lastTime = currentTime;
 
 		//Drawing
 		
