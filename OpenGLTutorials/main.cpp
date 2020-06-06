@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
 		float currentTime = SDL_GetTicks() / 1000.0f;
 		deltaTime = currentTime - lastTime;
 
-		printf("FPS: %i\n", (int)round(1.0f / deltaTime));
+		//printf("FPS: %i\n", (int)round(1.0f / deltaTime));
 
 		lastTime = currentTime;
 
