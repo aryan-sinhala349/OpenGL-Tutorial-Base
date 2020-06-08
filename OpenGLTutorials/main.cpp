@@ -29,6 +29,22 @@ float lastTime = 0.0f;
 
 VSyncMode vsync = VSyncMode::Immediate;
 
+float vertices[12] =
+{
+	-0.5f, -0.5f, 0.0f, //0
+	 0.5f, -0.5f, 0.0f, //1
+	 0.5f,  0.5f, 0.0f, //2
+	-0.5f,  0.5f, 0.0f  //3
+};
+
+uint32_t indices[6] =
+{
+	0, 1, 2,
+	2, 3, 0
+};
+
+uint32_t vao = 0, vbo = 0, ebo = 0;
+
 int main(int argc, char* argv[])
 {
 	std::string directory = file.substr(0, file.find_last_of("\\")) + "\\";
@@ -80,6 +96,24 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
+	glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
+
+	glCreateVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glCreateBuffers(1, &vbo);
+	glCreateBuffers(1, &ebo);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 * sizeof(float)), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 	SDL_Event event;
 	bool running = true;
 
@@ -112,6 +146,8 @@ int main(int argc, char* argv[])
 		SDL_GetWindowSize(window, &width, &height);
 		aspectRatio = (float)width / (float)height;
 
+		glViewport(0, 0, width, height);
+
 		//Updating
 		float currentTime = SDL_GetTicks() / 1000.0f;
 		deltaTime = currentTime - lastTime;
@@ -121,6 +157,10 @@ int main(int argc, char* argv[])
 		lastTime = currentTime;
 
 		//Drawing
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glBindVertexArray(vao);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		
 		//Buffer swapping
 		SDL_GL_SwapWindow(window);
