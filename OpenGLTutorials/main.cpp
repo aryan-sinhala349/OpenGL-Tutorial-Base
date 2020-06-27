@@ -29,12 +29,12 @@ float lastTime = 0.0f;
 
 VSyncMode vsync = VSyncMode::Immediate;
 
-float vertices[12] =
+float vertices[7 * 4] =
 {
-	-0.5f, -0.5f, 0.0f, //0
-	 0.5f, -0.5f, 0.0f, //1
-	 0.5f,  0.5f, 0.0f, //2
-	-0.5f,  0.5f, 0.0f  //3
+	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, //0
+	 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.25f, //1
+	 0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.75f, //2
+	-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f //3
 };
 
 uint32_t indices[6] =
@@ -44,6 +44,8 @@ uint32_t indices[6] =
 };
 
 uint32_t vao = 0, vbo = 0, ebo = 0;
+
+Shader shader;
 
 int main(int argc, char* argv[])
 {
@@ -96,6 +98,9 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
 
 	glCreateVertexArrays(1, &vao);
@@ -109,10 +114,15 @@ int main(int argc, char* argv[])
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 * sizeof(float)), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (7 * sizeof(float)), (void*)0);
 	glEnableVertexAttribArray(0);
 
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, (7 * sizeof(float)), (void*)(sizeof(float) * 3));
+	glEnableVertexAttribArray(1);
+
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	shader.Load((directory + "default.vert").c_str(), (directory + "default.frag").c_str());
 
 	SDL_Event event;
 	bool running = true;
@@ -159,6 +169,7 @@ int main(int argc, char* argv[])
 		//Drawing
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		shader.Use();
 		glBindVertexArray(vao);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		

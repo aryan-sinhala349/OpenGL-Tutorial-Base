@@ -63,7 +63,7 @@ public:
 		if (!success)
 		{
 			glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-			std::cerr << ("Failed to compile fragment shader!");
+			std::cerr << ("Failed to compile vertex shader!");
 			std::cout << infoLog << std::endl;
 		}
 
