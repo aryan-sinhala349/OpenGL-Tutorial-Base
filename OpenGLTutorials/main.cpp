@@ -21,8 +21,8 @@ enum class VSyncMode
 };
 
 std::string file = __FILE__;
-int width = 800, height = 600;
-float aspectRatio = 800.0f / 600.0f;
+int width = 1280, height = 720;
+float aspectRatio = 1280.0f / 720.0f;
 
 float deltaTime = 0.0f;
 float lastTime = 0.0f;
@@ -31,10 +31,10 @@ VSyncMode vsync = VSyncMode::Immediate;
 
 float vertices[7 * 4] =
 {
-	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, //0
-	 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.25f, //1
-	 0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.75f, //2
-	-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f //3
+	-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
+	 0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
+	 0.5f,  0.5f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
+	-0.5f,  0.5f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
 };
 
 uint32_t indices[6] =
@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
+	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
 	glCreateVertexArrays(1, &vao);
 	glBindVertexArray(vao);
